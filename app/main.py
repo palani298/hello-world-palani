@@ -50,10 +50,16 @@ def flatten_json(data: Dict[str, Any]) -> List[Any]:
 async def unravel(data: Dict[str, Any]):
     return flatten_json(data)
 
-@app.get("/roll")
+@app.post("/roll")
 async def roll():
     try:
+        # Pull latest code
         subprocess.run(["git", "pull"], check=True)
-        os.execv(sys.executable, [sys.executable] + sys.argv)
-    except subprocess.CalledProcessError:
-        raise HTTPException(status_code=500, detail="Failed to pull latest code.")
+        
+        # Restart the server
+        subprocess.run(["pkill", "-f", "uvicorn"], check=True)
+        subprocess.Popen(["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"])
+        
+        return {"status": "success", "message": "Server rolled successfully"}
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
