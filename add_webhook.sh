@@ -15,20 +15,19 @@ fi
 GITHUB_TOKEN=$1
 REPO_OWNER="palani298"
 REPO_NAME="hello_world_palani"
-WEBHOOK_URL="https://c6ca-108-211-107-196.ngrok-free.app/roll"
-# Get ngrok URL if available
-# if command -v ngrok &> /dev/null; then
-#     NGROK_URL=$(curl -s http://localhost:4040/api/tunnels | jq -r '.tunnels[0].public_url')
-#     if [ "$NGROK_URL" != "null" ]; then
-#         WEBHOOK_URL="${NGROK_URL}/roll"
-#     else
-#         echo -e "${BLUE}Enter your webhook URL (e.g., https://your-server.com/roll):${NC}"
-#         read WEBHOOK_URL
-#     fi
-# else
-#     echo -e "${BLUE}Enter your webhook URL (e.g., https://your-server.com/roll):${NC}"
-#     read WEBHOOK_URL
-# fi
+ Get ngrok URL if available
+ if command -v ngrok &> /dev/null; then
+     NGROK_URL=$(curl -s http://localhost:4040/api/tunnels | jq -r '.tunnels[0].public_url')
+     if [ "$NGROK_URL" != "null" ]; then
+         WEBHOOK_URL="${NGROK_URL}/roll"
+     else
+         echo -e "${BLUE}Enter your webhook URL (e.g., https://your-server.com/roll):${NC}"
+         read WEBHOOK_URL
+     fi
+ else
+     echo -e "${BLUE}Enter your webhook URL (e.g., https://your-server.com/roll):${NC}"
+     read WEBHOOK_URL
+ fi
 
 # Create webhook using GitHub API
 echo -e "${BLUE}Adding webhook to repository...${NC}"
